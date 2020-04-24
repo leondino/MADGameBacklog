@@ -20,21 +20,10 @@ class AddActivityViewModel(application: Application) :  AndroidViewModel(applica
     val error = MutableLiveData<String?>()
     val success = MutableLiveData<Boolean>()
 
-    fun insterGame() {
-        if (isGameValid()) {
-            mainScope.launch {
-                withContext(Dispatchers.IO) {
-                    gameRepository.insertGame(game.value!!)
-                }
-                success.value = true
-            }
-        }
-    }
-
-    private fun isGameValid(): Boolean {
+    fun isGameValid(): Boolean {
         return when {
             game.value == null -> {
-                error.value = "Note must not be null"
+                error.value = "Game must not be null"
                 false
             }
             game.value!!.title.isBlank() -> {
@@ -51,7 +40,10 @@ class AddActivityViewModel(application: Application) :  AndroidViewModel(applica
                 error.value = "Please fill in a valid date"
                 false
             }
-            else -> true
+            else -> {
+                success.value = true
+                true
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.gamebacklog.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gamebacklog.R
 import com.example.gamebacklog.model.Game
+import com.example.gamebacklog.ui.AddActivity.Companion.EXTRA_GAME
 
 import kotlinx.android.synthetic.main.activity_backlog.*
 import kotlinx.android.synthetic.main.content_backlog.*
@@ -30,6 +32,8 @@ class BacklogActivity : AppCompatActivity() {
         setContentView(R.layout.activity_backlog)
         setSupportActionBar(toolbar)
 
+        initViews()
+        initViewModel()
     }
 
     private fun initViews(){
@@ -57,6 +61,18 @@ class BacklogActivity : AppCompatActivity() {
         startActivityForResult(intent, ADD_GAME_REQUEST_CODE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK){
+            when(requestCode){
+                ADD_GAME_REQUEST_CODE -> {
+                    val game = data!!.getParcelableExtra<Game>(EXTRA_GAME)
+                    viewModel.insertGame(game)
+                }
+            }
+        }
+    }
+
     private fun createItemTouchHelper() : ItemTouchHelper {
         val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
             override fun onMove(
@@ -69,8 +85,8 @@ class BacklogActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position =  viewHolder.adapterPosition
-                val reminderToDelete = games[position]
-                viewModel.deleteReminder(reminderToDelete)
+                val gameToDelete = games[position]
+                viewModel.deleteGame(gameToDelete)
             }
         }
         return ItemTouchHelper(callback)

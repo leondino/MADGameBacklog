@@ -16,14 +16,13 @@ class BacklogActivityViewModel(application: Application): AndroidViewModel(appli
 
     val games: LiveData<List<Game>> = gameRepository.getAllGames()
 
-    // Move to Edit activity for optional steps!! (Maybe not)
-    fun insertReminder(game: Game){
+    fun insertGame(game: Game){
         ioScope.launch {
             gameRepository.insertGame(game)
         }
     }
 
-    fun deleteReminder(game: Game){
+    fun deleteGame(game: Game){
         ioScope.launch {
             gameRepository.deleteGame(game)
         }
