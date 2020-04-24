@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.gamebacklog.R
+import com.example.gamebacklog.model.Game
 
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.content_add.*
@@ -35,7 +36,6 @@ class AddActivity : AppCompatActivity() {
     private fun initViews(){
         fab.setOnClickListener { view ->
             onSaveClick()
-            addActivityViewModel.isGameValid()
         }
     }
 
@@ -57,13 +57,12 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun onSaveClick(){
-        addActivityViewModel.game.value?.apply {
-            title = etTitle.text.toString()
+        addActivityViewModel.game.value = Game(
+            title = etTitle.text.toString(),
             releaseDate = Date(etYear.text.toString().toInt(),
-                etMonth.text.toString().toInt(), etDay.text.toString().toInt())
-            platform = etPlatform.text.toString()
-        }
-        Toast.makeText(this, addActivityViewModel.game.value?.title, Toast.LENGTH_SHORT).show()
+                etMonth.text.toString().toInt(), etDay.text.toString().toInt()),
+            platform = etPlatform.text.toString())
+        addActivityViewModel.isGameValid()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
