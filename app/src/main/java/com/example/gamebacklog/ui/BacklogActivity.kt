@@ -5,11 +5,18 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.gamebacklog.R
+import com.example.gamebacklog.model.Game
 
 import kotlinx.android.synthetic.main.activity_backlog.*
 
 class BacklogActivity : AppCompatActivity() {
+
+    private val games = arrayListOf<Game>()
+    private val gameAdapter = GameAdapter(games)
+    private lateinit var viewModel: BacklogActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +27,17 @@ class BacklogActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
+
+    private fun initViews(){
+        viewModel = ViewModelProvider(this).get(BacklogActivityViewModel::class.java)
+
+        viewModel.games.observe(this, Observer{
+            games ->
+            this@BacklogActivity.games.clear()
+            this@BacklogActivity.games.addAll(games)
+            gameAdapter.notifyDataSetChanged()
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
