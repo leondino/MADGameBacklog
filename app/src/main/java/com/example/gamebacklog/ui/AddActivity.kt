@@ -62,9 +62,12 @@ class AddActivity : AppCompatActivity() {
             releaseDate = Date(),
             platform = etPlatform.text.toString()
         )
-        // Check date on numbers
+        // Check date on numbers (Not in ViewModel because of problems and structure)
         if((etDay.text.toString()+etMonth.text.toString()+etYear.text.toString())
-                .matches("[0-9]+".toRegex())) {
+                .matches("[0-9]+".toRegex()) ||
+            (etDay.text.toString().toInt() <=0 || etDay.text.toString().toInt() >=32
+                    || etMonth.text.toString().toInt() <=0 || etMonth.text.toString().toInt() >=13
+                    || etYear.text.toString().toInt() <= 1900)) {
             addActivityViewModel.game.value?.releaseDate =
                 Date(
                     etYear.text.toString().toInt(),

@@ -36,7 +36,7 @@ class AddActivityViewModel(application: Application) :  AndroidViewModel(applica
             }
             game.value!!.releaseDate.day <=0 || game.value!!.releaseDate.day >=32
                     || game.value!!.releaseDate.month <=0 || game.value!!.releaseDate.month >=13
-                    || game.value!!.releaseDate.year <= 1900 || game.value!!.releaseDate == null -> {
+                    || game.value!!.releaseDate.year <= 1900 -> {
                 error.value = "Please fill in a valid date"
                 false
             }

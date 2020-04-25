@@ -27,4 +27,10 @@ class BacklogActivityViewModel(application: Application): AndroidViewModel(appli
             gameRepository.deleteGame(game)
         }
     }
+
+    fun deleteGameBacklog(){
+        ioScope.launch {
+            gameRepository.deleteAllGames()
+        }
+    }
 }
