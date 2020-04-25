@@ -24,7 +24,7 @@ const val ADD_GAME_REQUEST_CODE = 100
 class BacklogActivity : AppCompatActivity() {
 
     private val games = arrayListOf<Game>()
-    private val gameAdapter = GameAdapter(games)
+    private val gameAdapter = GameAdapter(games, this)
     private lateinit var viewModel: BacklogActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

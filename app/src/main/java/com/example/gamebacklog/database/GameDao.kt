@@ -10,7 +10,7 @@ import com.example.gamebacklog.model.Game
 @Dao
 interface GameDao {
 
-    @Query("SELECT * FROM gameTable ORDER BY releaseDate")
+    @Query("SELECT * FROM gameTable ORDER BY releaseDate ASC")
     fun getAllGames(): LiveData<List<Game>>
 
     @Insert

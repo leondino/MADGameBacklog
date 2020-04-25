@@ -1,5 +1,6 @@
 package com.example.gamebacklog.ui
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +9,14 @@ import com.example.gamebacklog.R
 import com.example.gamebacklog.model.Game
 import kotlinx.android.synthetic.main.item_game.view.*
 
-class GameAdapter(private val games: List<Game>) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
+class GameAdapter(private val games: List<Game>, private val context: Context) : RecyclerView.Adapter<GameAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bind(game: Game){
             itemView.tvTitle.text = game.title
             itemView.tvPlatform.text = game.platform
-            itemView.tvDate.text = game.releaseDate.toString()
+            itemView.tvDate.text = context.getString(R.string.release_date, game.releaseDate.day.toString(),
+            game.releaseDate.month.toString(), game.releaseDate.year.toString())
         }
     }
 

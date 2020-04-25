@@ -59,9 +59,18 @@ class AddActivity : AppCompatActivity() {
     private fun onSaveClick(){
         addActivityViewModel.game.value = Game(
             title = etTitle.text.toString(),
-            releaseDate = Date(etYear.text.toString().toInt(),
-                etMonth.text.toString().toInt(), etDay.text.toString().toInt()),
-            platform = etPlatform.text.toString())
+            releaseDate = Date(),
+            platform = etPlatform.text.toString()
+        )
+        // Check date on numbers
+        if((etDay.text.toString()+etMonth.text.toString()+etYear.text.toString())
+                .matches("[0-9]+".toRegex())) {
+            addActivityViewModel.game.value?.releaseDate =
+                Date(
+                    etYear.text.toString().toInt(),
+                    etMonth.text.toString().toInt(), etDay.text.toString().toInt()
+                )
+        }
         addActivityViewModel.isGameValid()
     }
 
