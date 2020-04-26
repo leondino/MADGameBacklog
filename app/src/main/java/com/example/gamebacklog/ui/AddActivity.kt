@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -64,8 +65,8 @@ class AddActivity : AppCompatActivity() {
         )
         // Check date on numbers (Not in ViewModel because of problems and structure)
         if((etDay.text.toString()+etMonth.text.toString()+etYear.text.toString())
-                .matches("[0-9]+".toRegex()) ||
-            (etDay.text.toString().toInt() <=0 || etDay.text.toString().toInt() >=32
+                .matches("[0-9]+".toRegex()) &&
+            !(etDay.text.toString().toInt() <=0 || etDay.text.toString().toInt() >=32
                     || etMonth.text.toString().toInt() <=0 || etMonth.text.toString().toInt() >=13
                     || etYear.text.toString().toInt() <= 1900)) {
             addActivityViewModel.game.value?.releaseDate =

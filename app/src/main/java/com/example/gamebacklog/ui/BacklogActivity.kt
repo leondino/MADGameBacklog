@@ -7,6 +7,8 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -26,6 +28,8 @@ class BacklogActivity : AppCompatActivity() {
     private val games = arrayListOf<Game>()
     private val gameAdapter = GameAdapter(games, this)
     private lateinit var viewModel: BacklogActivityViewModel
+    private var deletedGames = arrayListOf<Game>()
+    private lateinit var lastDeletedGame: Game
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +90,11 @@ class BacklogActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position =  viewHolder.adapterPosition
                 val gameToDelete = games[position]
+                lastDeletedGame = gameToDelete
                 viewModel.deleteGame(gameToDelete)
+                Snackbar.make(rvGames, "Game Deleted", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", snackbarUndoListner(null, gameToDelete))
+                    .show()
             }
         }
         return ItemTouchHelper(callback)
@@ -104,10 +112,29 @@ class BacklogActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_delete_item -> {
+                deletedGames.addAll(games)
                 viewModel.deleteGameBacklog()
+                Snackbar.make(rvGames, "Game Deleted", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", snackbarUndoListner(deletedGames, null))
+                    .show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    inner class snackbarUndoListner(
+        private val returningGames: List<Game>?, private val deletedGame: Game?
+    ) : View.OnClickListener{
+        override fun onClick(view: View?) {
+            if (returningGames != null){
+                for (game in returningGames)
+                    viewModel.insertGame(game)
+            }
+            else if(deletedGame != null){
+                viewModel.insertGame(deletedGame)
+            }
+        }
+
     }
 }
